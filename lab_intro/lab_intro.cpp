@@ -61,6 +61,24 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
 }
  
 
+double getColorDistance(double h1, double h2) {
+  double max = h1;
+  double min = h2;
+
+  if (h2 > max) {
+    max = h2;
+    min = h1;
+  }
+
+  double d1 = max - min;
+  double d2 = 360.0 - max + min;
+
+  if (d1 <= d2) {
+    return d1;
+  }
+  return d2;
+}
+
 /**
  * Returns a image transformed to Illini colors.
  *
@@ -72,6 +90,21 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+  for (int i = 0; i < image.height(); i++) {
+    for (int j = 0; j < image.width(); j++) {
+      HSLAPixel &currentPixel = image.getPixel(j, i);
+      HSLAPixel pixel = *(currentPixel);
+      
+      double d1 = getColorDistance(pixel.h, 11.0);
+      double d2 = getColorDistance(pixel.h, 216.0);
+
+      if (d1 <= d2) {
+        pixel.h = 11.0;
+      } else {
+        pixel.h = 216.0;
+      }
+    }
+  }
 
   return image;
 }
