@@ -45,7 +45,7 @@ PNG grayscale(PNG image) {
  * is a total of `sqrt((3 * 3) + (4 * 4)) = sqrt(25) = 5` pixels away and
  * its luminance is decreased by 2.5% (0.975x its original value).  At a
  * distance over 160 pixels away, the luminance will always decreased by 80%.
- * 
+ *
  * The modified PNG is then returned.
  *
  * @param image A PNG object which holds the image data to be modified.
@@ -55,11 +55,23 @@ PNG grayscale(PNG image) {
  * @return The image with a spotlight.
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
+  for (unsigned i = 0; i < image.height(); i++) {
+    for (unsigned j = 0; j < image.width(); j++) {
+      double distance = sqrt((j - centerX) * (j - centerX) + (i - centerY) * (i - centerY));
 
+      double sub = distance * 0.005;
+      if (sub > 0.8) {
+        sub = 0.8;
+      }
+
+      HSLAPixel &pixel = image.getPixel(j, i);
+      pixel.l *= (1 - sub);
+    }
+  }
   return image;
-  
+
 }
- 
+
 
 double getColorDistance(double h1, double h2) {
   double max = h1;
@@ -90,11 +102,10 @@ double getColorDistance(double h1, double h2) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
-  for (int i = 0; i < image.height(); i++) {
-    for (int j = 0; j < image.width(); j++) {
-      HSLAPixel &currentPixel = image.getPixel(j, i);
-      HSLAPixel pixel = *(currentPixel);
-      
+  for (unsigned i = 0; i < image.height(); i++) {
+    for (unsigned j = 0; j < image.width(); j++) {
+      HSLAPixel &pixel = image.getPixel(j, i);
+
       double d1 = getColorDistance(pixel.h, 11.0);
       double d2 = getColorDistance(pixel.h, 216.0);
 
@@ -108,7 +119,7 @@ PNG illinify(PNG image) {
 
   return image;
 }
- 
+
 
 /**
 * Returns an immge that has been watermarked by another image.
@@ -123,6 +134,18 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
+  for (unsigned i = 0; i < secondImage.height(); i++) {
+    for (unsigned j = 0; j < secondImage.width(); j++) {
+      HSLAPixel &pixel = secondImage.getPixel(j, i);
 
+      if (j < firstImage.width() && i < firstImage.height() && pixel.l == 1) {
+        HSLAPixel &pixel2 = firstImage.getPixel(j, i);
+        pixel2.l += 0.2;
+        if (pixel2.l > 1) {
+          pixel2.l = 1.0;
+        }
+      }
+    }
+  }
   return firstImage;
 }
