@@ -61,8 +61,7 @@ void Room::print(std::ostream & stream /* = std::cout */)
 void Room::clear()
 {
     if (letters != NULL)
-
-        delete letters;
+        delete[] letters;
 }
 
 void Room::copy(const Room& other)

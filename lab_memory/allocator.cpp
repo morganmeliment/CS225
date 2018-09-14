@@ -53,9 +53,9 @@ void Allocator::loadRooms(const string& file)
     totalCapacity = 0;
     int i = 0;
     while (fileio::areMoreRooms()) {
-        i++;
         rooms[i] = fileio::nextRoom();
         totalCapacity += rooms[i].capacity;
+        i++;
     }
 }
 
