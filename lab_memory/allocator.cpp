@@ -122,3 +122,10 @@ Room* Allocator::largestOpening()
     }
     return &rooms[index];
 }
+
+Allocator::~Allocator() {
+    delete[] rooms;
+    delete[] alpha;
+    rooms = NULL;
+    alpha = NULL;
+}
