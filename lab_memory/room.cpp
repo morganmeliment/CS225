@@ -73,6 +73,8 @@ void Room::copy(const Room& other)
     capacity = other.capacity;
     count = other.count;
     letterCount = other.letterCount;
-    letters = other.letters;
-
+    max_letters = other.max_letters;
+    letters = new Letter[other.max_letters];
+    for (int i = 0; i < max_letters; i++)
+        letters[i] = other.letters[i];
 }
