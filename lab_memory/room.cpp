@@ -41,8 +41,9 @@ Room::~Room()
 
 void Room::addLetter(const Letter& L)
 {
-    letters[letterCount++] = L;
+    letters[letterCount] = L;
     count += L.count;
+    letterCount += 1;
 }
 
 int Room::spaceRemaining()
