@@ -17,7 +17,7 @@ using namespace cs225;
 class Drawable
 {
   public:
-    ~Drawable()
+    virtual ~Drawable()
     { /* Nothing */
     }
 
@@ -28,4 +28,3 @@ class Drawable
      */
     virtual void draw(PNG* canvas) const = 0;
 };
-

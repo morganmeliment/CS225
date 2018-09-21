@@ -38,7 +38,7 @@ class Shape : public Drawable
      */
     Shape(const Vector2& center, const HSLAPixel& color);
 
-    ~Shape()
+    virtual ~Shape()
     { /* Nothing */
     }
 
