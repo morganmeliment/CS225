@@ -22,11 +22,9 @@ class StickerSheet {
         Image * getSticker(unsigned index) const;
         Image render() const;
 
-    private:
-        const Image &backgroundImage;
+        int maxImages = 0;
+        int imageCount = 0;
+        Image backgroundImage;
         Image* images;
         std::map<Image*, std::vector<int>> coordinateMap;
-
-
-
 };
