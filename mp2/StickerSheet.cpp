@@ -36,7 +36,6 @@ StickerSheet::StickerSheet(const StickerSheet &other) {
 
 StickerSheet const & StickerSheet::operator=(const StickerSheet &other) {
     if (this != &other) {
-        images = NULL;
         delete[] images;
         images = new Image[other.maxImages];
         maxImages = other.maxImages;
