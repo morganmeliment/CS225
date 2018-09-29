@@ -21,9 +21,11 @@ template <typename T>
 inline string colorize(const T& actual, const T& expected);
 string make_red(const string& output);
 string make_green(const string& output);
+queue<char> stringToQueue(std::string s);
 
 int main()
 {
+     /*
     cout << boolalpha
          << endl; // make true and false print for bools, not 0 and 1
 
@@ -113,7 +115,9 @@ int main()
         cout << "Stack and queue " + make_green("unmodified: :)") << endl;
     else
         cout << "Stack or queue " + make_red("CHANGED: :(") << endl;
-    cout << endl;
+    cout << endl;*/
+
+    std::cout << QuackFun::isBalanced(stringToQueue("[]")) << std::endl;
 }
 
 template <typename T>
@@ -134,6 +138,16 @@ inline string colorize(const T& actual, const T& expected)
             return "\033[31m" + to_string(actual) + "\033[0m";
     } else
         return to_string(actual);
+}
+
+queue<char> stringToQueue(std::string s)
+{
+    queue<char> q;
+
+    for (char c : s)
+        q.push(c);
+
+    return q;
 }
 
 string make_red(const string& output)

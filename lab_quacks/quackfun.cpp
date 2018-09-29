@@ -23,18 +23,22 @@ namespace QuackFun {
  * @hint Think recursively!
  */
 template <typename T>
-T sum(stack<T>& s)
-{
+T sum(stack<T>& s) {
+    if ((int) s.size() == 0) return T();
 
-    // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+    T s1 = s.top();
+    s.pop();
+    T s2 = s1 + sum(s);
+    s.push(s1);
+
+    return s2; // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
 
 /**
- * Checks whether the given string (stored in a queue) has balanced brackets. 
- * A string will consist of 
+ * Checks whether the given string (stored in a queue) has balanced brackets.
+ * A string will consist of
  * square bracket characters, [, ], and other characters. This function will return
  * true if and only if the square bracket characters in the given
  * string are balanced. For this to be true,
@@ -49,11 +53,25 @@ T sum(stack<T>& s)
  * @param input The queue representation of a string to check for balanced brackets in
  * @return Whether the input string had balanced brackets
  */
-bool isBalanced(queue<char> input)
-{
+bool isBalanced(queue<char> input) {
+    int toClose = 0;
+    stack<char> rev = stack<char>();
 
-    // @TODO: Make less optimistic
-    return true;
+    for (int i = 0; i < (int) input.size();) {
+        char a = input.front();
+        if (a == '[') {
+            toClose++;
+        } else if (a == ']') {
+            if (toClose < 1) {
+                return false;
+            }
+            toClose--;
+        }
+        input.pop();
+    }
+
+    if (toClose == 0) return true;
+    return false;
 }
 
 /**
@@ -69,12 +87,36 @@ bool isBalanced(queue<char> input)
  * @hint You'll want to make a local stack variable.
  */
 template <typename T>
-void scramble(queue<T>& q)
-{
-    stack<T> s;
-    // optional: queue<T> q2;
+void scramble(queue<T>& q) {
+    stack<T> s = stack<T>();
+    queue<T> q2 = queue<T>();
 
-    // Your code here
+    int i = 0;
+    while (!q.empty()) {
+        i++;
+
+        if (i % 2 == 0) {
+            for (int j = 0; j < i && !q.empty(); j++) {
+                s.push(q.front());
+                q.pop();
+            }
+
+            while (!s.empty()) {
+                q2.push(s.top());
+                s.pop();
+            }
+        } else {
+            for (int j = 0; j < i && !q.empty(); j++) {
+                q2.push(q.front());
+                q.pop();
+            }
+        }
+    }
+
+    while (!q2.empty()) {
+        q.push(q2.front());
+        q2.pop();
+    }
 }
 
 /**
@@ -93,15 +135,36 @@ void scramble(queue<T>& q)
  *   sure to comment your code VERY well.
  */
 template <typename T>
-bool verifySame(stack<T>& s, queue<T>& q)
-{
-    bool retval = true; // optional
-    // T temp1; // rename me
-    // T temp2; // rename :)
+bool verifySame(stack<T>& s, queue<T>& q) {
+    // Check if the stack or queue are empty.
+    // Return false unless they are both empty.
+    if (s.empty()) return q.empty();
+    else if (q.empty()) return false;
 
-    // Your code here
+    // Store if s and q were proven to be unequal
+    // at any step.
+    bool retval = true;
 
-    return retval;
+    // Take apart the stack in order to compare
+    // element by element.
+    T sval = s.top();
+    s.pop();
+
+    // Recursively dig deeper until the end of
+    // the stack.
+    if (!s.empty()) retval = verifySame(s, q);
+
+    // Swap the top queue element and store its
+    // value for comparison. +Rebuild the stack.
+    T qval = q.front();
+    q.pop();
+    q.push(qval);
+    s.push(sval);
+
+    // Return comparison result unless we already
+    // have found that s and q are not equal.
+    if (retval) return qval == sval;
+    return false;
 }
 
 }
