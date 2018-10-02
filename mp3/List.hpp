@@ -157,14 +157,15 @@ void List<T>::reverseNth(int n) {
     ListNode * currentNode = head_;
 
     while (currentNode != tail_->next) {
-        int i = 0;
+        int i = 1;
 
         while (i < n && currentNode != tail_) {
             i++;
             currentNode = currentNode->next;
         }
+        ListNode * nextP = currentNode->next;
         reverse(startNode, currentNode);
-        startNode = currentNode->next;
+        startNode = nextP;
         currentNode = startNode;
     }
 }
