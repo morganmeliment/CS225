@@ -111,6 +111,9 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
     if (startPoint == endPoint || !startPoint || !endPoint)
         return;
 
+    bool ss = startPoint == head_;
+    bool es = endPoint == tail_;
+
     ListNode * currentNode = endPoint->prev;
     ListNode * tempNode = startPoint->next;
     ListNode * tempNode2 = endPoint;
@@ -137,6 +140,13 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 
     endPoint = startPoint;
     startPoint = tempNode2;
+
+    if (ss) {
+        head_ = startPoint;
+    }
+    if (es) {
+        tail_ = endPoint;
+    }
 }
 
 /**
@@ -155,21 +165,28 @@ void List<T>::reverseNth(int n) {
 
     ListNode * startNode = head_;
     ListNode * currentNode = head_;
+    bool s = false;
 
     while (currentNode != tail_->next) {
         int i = 1;
 
         while (i < n) {
-            if (currentNode == tail_)
+            if (currentNode == tail_ || !currentNode)
                 break;
             i++;
             currentNode = currentNode->next;
+        }
+        if (currentNode == tail_ || !currentNode) {
+            s = true;
+            break;
         }
         ListNode * nextP = currentNode->next;
         reverse(startNode, currentNode);
         startNode = nextP;
         currentNode = startNode;
     }
+    if (s)
+        reverse(startNode, tail_);
 }
 
 /**
@@ -183,7 +200,22 @@ void List<T>::reverseNth(int n) {
  */
 template <typename T>
 void List<T>::waterfall() {
-  /// @todo Graded in MP3.1
+    /// @todo Graded in MP3.1
+    if (head_ && head_->next) {
+        ListNode * current = head_->next;
+        while (current && current != tail_) {
+            if (current->prev)
+                current->prev->next = current->next;
+            if (current->next)
+                current->next->prev = current->prev;
+            ListNode * resume = current->next;
+            tail_->next = current;
+            current->prev = tail_;
+            current->next = NULL;
+            tail_ = current;
+            current = resume->next;
+        }
+    }
 }
 
 /**

@@ -12,7 +12,7 @@
 #include "../List.h"
 
 using namespace cs225;
-/*
+
 TEST_CASE("List::split", "[weight=10][part=2]") {
   PNG in;         in.readFromFile("tests/split.png");
   PNG expected_1; expected_1.readFromFile("tests/expected-split_1.png");
@@ -147,4 +147,3 @@ TEST_CASE("List::sort #2", "[weight=5][part=2]") {
 
   REQUIRE( b3 == expected );
 }
-*/
