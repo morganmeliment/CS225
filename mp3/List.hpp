@@ -40,10 +40,15 @@ List<T>::~List() {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
-  delete head_;
-  delete tail_;
+  ListNode * current = head_;
+  while (current) {
+      ListNode * temp = current->next;
+      delete current;
+      current = temp;
+  }
   head_ = NULL;
   tail_ = NULL;
+  current = NULL;
 }
 
 /**
