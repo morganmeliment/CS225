@@ -159,7 +159,9 @@ void List<T>::reverseNth(int n) {
     while (currentNode != tail_->next) {
         int i = 1;
 
-        while (i < n && currentNode != tail_) {
+        while (i < n) {
+            if (currentNode == tail_)
+                break;
             i++;
             currentNode = currentNode->next;
         }
