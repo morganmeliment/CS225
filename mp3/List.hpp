@@ -11,7 +11,7 @@
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(nullptr);
+  return List<T>::ListIterator(head_);
 }
 
 /**
@@ -20,7 +20,7 @@ typename List<T>::ListIterator List<T>::begin() const {
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(nullptr);
+  return List<T>::ListIterator(tail_->next);
 }
 
 /**
@@ -30,6 +30,7 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 List<T>::~List() {
   /// @todo Graded in MP3.1
+  _destroy();
 }
 
 /**
@@ -39,6 +40,10 @@ List<T>::~List() {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
+  delete head_;
+  delete tail_;
+  head_ = NULL;
+  tail_ = NULL;
 }
 
 /**
@@ -50,6 +55,17 @@ void List<T>::_destroy() {
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
+  ListNode * tempNode = head_;
+  head_ = new ListNode(ndata);
+  head_->next = tempNode;
+
+  if (tempNode)
+    tempNode->prev = head_;
+
+  if (!tail_) {
+      tail_ = head_;
+  }
+  length_++;
 }
 
 /**
@@ -61,6 +77,14 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
+  if (!head_ || !tail_)
+      return insertFront(ndata);
+
+  ListNode * tempNode = tail_;
+  tail_ = new ListNode(ndata);
+  tempNode->next = tail_;
+  tail_->prev = tempNode;
+  length_++;
 }
 
 /**
@@ -84,7 +108,35 @@ void List<T>::reverse() {
  */
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
-  /// @todo Graded in MP3.1
+    if (startPoint == endPoint || !startPoint || !endPoint)
+        return;
+
+    ListNode * currentNode = endPoint->prev;
+    ListNode * tempNode = startPoint->next;
+    ListNode * tempNode2 = endPoint;
+
+    if (startPoint->prev)
+        startPoint->prev->next = endPoint;
+    if (endPoint->next)
+        endPoint->next->prev = startPoint;
+
+    endPoint->prev = startPoint->prev;
+    startPoint->next = endPoint->next;
+    startPoint->prev = tempNode;
+    endPoint->next = currentNode;
+
+
+
+    while (currentNode != startPoint) {
+        tempNode = currentNode->next;
+        currentNode->next = currentNode->prev;
+        currentNode->prev = tempNode;
+
+        currentNode = currentNode->next;
+    }
+
+    endPoint = startPoint;
+    startPoint = tempNode2;
 }
 
 /**
@@ -95,7 +147,26 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
  */
 template <typename T>
 void List<T>::reverseNth(int n) {
-  /// @todo Graded in MP3.1
+    /// @todo Graded in MP3.1
+    if (n >= length_)
+        return reverse();
+    if (n <= 1)
+        return;
+
+    ListNode * startNode = head_;
+    ListNode * currentNode = head_;
+
+    while (currentNode != tail_->next) {
+        int i = 0;
+
+        while (i < n && currentNode != tail_) {
+            i++;
+            currentNode = currentNode->next;
+        }
+        reverse(startNode, currentNode);
+        startNode = currentNode->next;
+        currentNode = startNode;
+    }
 }
 
 /**
