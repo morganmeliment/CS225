@@ -281,6 +281,25 @@ List<T> List<T>::split(int splitPoint) {
 template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.2
+  bool didFinish = true;
+  for (int i = 0; i < splitPoint - 1; i++) {
+      if (start) {
+          start = start->next;
+      } else {
+          didFinish = false;
+          break;
+      }
+  }
+
+  if (didFinish && start) {
+      ListNode * temp = start->next;
+      if (temp) {
+          temp->prev = NULL;
+      }
+      start->next = NULL;
+      return temp;
+  }
+
   return NULL;
 }
 
@@ -322,6 +341,29 @@ void List<T>::mergeWith(List<T> & otherList) {
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
+  ListNode * temp = first;
+  int length1 = 0;
+  if (temp) length1++;
+  while (temp && temp->next) {
+      temp = temp->next;
+      length1++;
+  }
+
+  ListNode * temp2 = second;
+  int length2 = 0;
+  if (temp2) length2++;
+  while (temp2 && temp2->next) {
+      temp2 = temp2->next;
+      length2++;
+  }
+
+  if (temp) {
+      temp->next = second;
+      second->prev = temp;
+      return mergesort(first, length1 + length2);
+  } else if (temp2) {
+      return mergesort(second, length2);
+  }
   return NULL;
 }
 
@@ -349,6 +391,48 @@ void List<T>::sort() {
  */
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
-  /// @todo Graded in MP3.2
-  return NULL;
+    /// @todo Graded in MP3.2
+    if (chainLength < 1) return NULL;
+    if (chainLength == 1) return start;
+
+    ListNode * right = mergesort(split(start, chainLength / 2), chainLength - (chainLength / 2));
+    ListNode * left = mergesort(start, chainLength / 2);
+
+    ListNode * mergedHead = NULL;
+
+    if (!(left->data < right->data)) {
+        mergedHead = right;
+        right = right->next;
+        mergedHead->prev = NULL;
+    } else {
+        mergedHead = left;
+        left = left->next;
+        mergedHead->prev = NULL;
+    }
+
+    ListNode * temp = mergedHead;
+
+    while (right && left) {
+        if (!(left->data < right->data)) {
+            temp->next = right;
+            right->prev = temp;
+            temp = right;
+            right = right->next;
+        } else {
+            temp->next = left;
+            left->prev = temp;
+            temp = left;
+            left = left->next;
+        }
+    }
+
+    if (right) {
+        temp->next = right;
+        right->prev = temp;
+    } else {
+        temp->next = left;
+        left->prev = temp;
+    }
+
+    return mergedHead;
 }
