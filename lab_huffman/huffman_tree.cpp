@@ -86,13 +86,13 @@ HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
      * smaller of the two queues heads is the smallest item in either of
      * the queues. Return this item after removing it from its queue.
     */
-    if (!singleQueue.front()) {
-        if (!mergeQueue.front()) return NULL;
+    if (singleQueue.empty()) {
+        if (mergeQueue.empty()) return NULL;
 
         TreeNode * temp = mergeQueue.front();
         mergeQueue.pop();
         return temp;
-    } else if (!mergeQueue.front()) {
+    } else if (mergeQueue.empty()) {
         TreeNode * temp = singleQueue.front();
         singleQueue.pop();
         return temp;
@@ -145,7 +145,7 @@ void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
          mergeQueue.push(internalNode);
      }
 
-     if (singleQueue.front()) root_ = singleQueue.front();
+     if (!singleQueue.empty()) root_ = singleQueue.front();
      else root_ = mergeQueue.front();
 }
 
@@ -235,8 +235,14 @@ HuffmanTree::TreeNode* HuffmanTree::readTree(BinaryFileReader& bfile)
      *         if it did not create one.
     */
 
-
-    return NULL;
+    if (!bfile.hasBits()) return NULL;
+    if (bfile.getNextBit()) {
+        return new TreeNode(Frequency(bfile.getNextByte(), 0));
+    }
+    TreeNode * temp = new TreeNode(0);
+    temp->left = readTree(bfile);
+    temp->right = readTree(bfile);
+    return temp;
 }
 
 void HuffmanTree::buildMap(TreeNode* current, vector<bool>& path)
