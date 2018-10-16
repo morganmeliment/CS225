@@ -26,7 +26,7 @@ public:
 
   ImageTraversal::Iterator begin();
   ImageTraversal::Iterator end();
-  
+
   void add(const Point & point);
   Point pop();
   Point peek() const;
@@ -35,4 +35,10 @@ public:
 private:
   /** @todo [Part 1] */
   /** add private members here*/
+  std::vector<Point> points;
+  std::vector<Point> alreadyVisited;
+  PNG tImage;
+  Point startPoint;
+  HSLAPixel op;
+  double tol;
 };

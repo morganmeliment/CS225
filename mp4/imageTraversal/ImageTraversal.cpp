@@ -11,7 +11,7 @@
 /**
  * Calculates a metric for the difference between two pixels, used to
  * calculate if a pixel is within a tolerance.
- * 
+ *
  * @param p1 First pixel
  * @param p2 Second pixel
  * @return the difference between two HSLAPixels
@@ -25,7 +25,7 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
   if (h > 180) { h = 360 - h; }
   h /= 360;
 
-  return sqrt( (h*h) + (s*s) + (l*l) );    
+  return sqrt( (h*h) + (s*s) + (l*l) );
 }
 
 /**
@@ -33,6 +33,15 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
+  stored = NULL;
+}
+
+/**
+ * Default iterator constructor.
+ */
+ImageTraversal::Iterator::Iterator(ImageTraversal * searchObject) {
+    /** @todo [Part 1] */
+    stored = searchObject;
 }
 
 /**
@@ -41,27 +50,46 @@ ImageTraversal::Iterator::Iterator() {
  * Advances the traversal of the image.
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  /** @todo [Part 1] */
-  return *this;
+    /** @todo [Part 1] */
+    if (!stored || stored->empty()) return *this;
+
+    Point next = stored->pop();
+    Point right = Point(next.x + 1, next.y);
+    Point down = Point(next.x, next.y + 1);
+    Point left = Point(next.x - 1, next.y);
+    Point up = Point(next.x, next.y - 1);
+
+    stored->add(right);
+    stored->add(down);
+    stored->add(left);
+    stored->add(up);
+
+    //if (stored->empty()) return *(new ImageTraversal::Iterator());
+
+    return *this;
 }
 
 /**
  * Iterator accessor opreator.
- * 
+ *
  * Accesses the current Point in the ImageTraversal.
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  if (!stored || stored->empty()) return Point(-1, -1);
+  return stored->peek();
 }
 
 /**
  * Iterator inequality operator.
- * 
+ *
  * Determines if two iterators are not equal.
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
+    if (!stored || stored->empty()) {
+        if (const_cast<ImageTraversal::Iterator&>(other).operator *() == Point(-1, -1)) return false;
+        return true;
+    }
   /** @todo [Part 1] */
-  return false;
+  return !(stored->peek() == const_cast<ImageTraversal::Iterator&>(other).operator *());
 }
-
