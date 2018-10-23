@@ -56,7 +56,7 @@ namespace cs225 {
       else if (h > other.h)
           return false;
       // == hue
-      
+
       if (s < other.s)
           return true;
       else if (s > other.s)

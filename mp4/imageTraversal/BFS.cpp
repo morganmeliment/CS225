@@ -64,12 +64,14 @@ void BFS::add(const Point & point) {
               alreadyVisited.push_back(point);
           }
       }
-  } else {
-      if (std::find(points.begin(), points.end(), point) != points.end()) {
-          points.erase(std::find(points.begin(), points.end(), point));
-          points.insert(points.begin(), point);
-      }
   }
+  // Not neccesary on BFS I guess. Will remove later.
+  // else {
+        //if (std::find(points.begin(), points.end(), point) != points.end()) {
+          //points.erase(std::find(points.begin(), points.end(), point));
+          //points.insert(points.begin(), point);
+      //}
+  //}
 }
 
 /**

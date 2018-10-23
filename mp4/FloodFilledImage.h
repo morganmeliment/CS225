@@ -27,5 +27,8 @@ public:
 private:
 	/** @todo [Part 2] */
 	/** add private members here*/
-
+    PNG fillImage;
+    bool hasBeenInitialized = false;
+    ImageTraversal * fillTraversal;
+    ColorPicker * picker;
 };
