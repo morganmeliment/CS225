@@ -80,7 +80,7 @@ void DFS::add(const Point & point) {
             }
         } else {
             if (currentVisited[point.x][point.y]) {
-                points.erase(std::find(points.begin(), points.end(), point));
+                //points.erase(std::find(points.begin(), points.end(), point));
                 points.push_back(point);
             }
             /*
@@ -99,6 +99,11 @@ Point DFS::pop() {
   /** @todo [Part 1] */
   if (points.empty()) return Point(-1, -1);
   Point temp = points.back();
+  while (!currentVisited[temp.x][temp.y]) {
+      points.pop_back();
+      if (points.empty()) return Point(-1, -1);
+      temp = points.back();
+  }
   currentVisited[temp.x][temp.y] = false;
   points.pop_back();
   return temp;
@@ -110,7 +115,13 @@ Point DFS::pop() {
 Point DFS::peek() const {
   /** @todo [Part 1] */
   if (points.empty()) return Point(-1, -1);
-  return points.back();
+  Point temp = points.back();
+  while (!currentVisited[temp.x][temp.y]) {
+      const_cast<DFS *>(this)->points.pop_back();
+      if (points.empty()) return Point(-1, -1);
+      temp = points.back();
+  }
+  return temp;
 }
 
 /**
