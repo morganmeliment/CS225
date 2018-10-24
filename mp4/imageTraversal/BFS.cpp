@@ -28,9 +28,19 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
   startPoint = start;
   tol = tolerance;
 
+  for (int i = 0; i < (int) png.width(); i++) {
+      std::vector<bool> row;
+      for (int j = 0; j < (int) png.height(); j++) {
+          row.push_back(false);
+      }
+      alreadyVisited.push_back(row);
+      currentVisited.push_back(row);
+  }
+
   if (start.x < png.width() && start.y < png.height()) {
       points.insert(points.begin(), start);
-      alreadyVisited.push_back(start);
+      alreadyVisited[start.x][start.y] = true;
+      currentVisited[start.x][start.y] = true;
       op = png.getPixel(start.x, start.y);
   }
 }
@@ -56,15 +66,16 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
+  /*
   if (std::find(alreadyVisited.begin(), alreadyVisited.end(), point) == alreadyVisited.end()) {
       if (point.x < tImage.width() && point.y < tImage.height()) {
           HSLAPixel & temp = tImage.getPixel(point.x, point.y);
           if (ImageTraversal::calculateDeltaHelper(temp, op) <= tol) {
-              points.insert(points.begin(), point);
+
               alreadyVisited.push_back(point);
           }
       }
-  }
+  }*/
   // Not neccesary on BFS I guess. Will remove later.
   // else {
         //if (std::find(points.begin(), points.end(), point) != points.end()) {
@@ -72,6 +83,17 @@ void BFS::add(const Point & point) {
           //points.insert(points.begin(), point);
       //}
   //}
+  if (point.x < tImage.width() && point.y < tImage.height()) {
+      if (!alreadyVisited[point.x][point.y]) {
+
+          HSLAPixel & temp = tImage.getPixel(point.x, point.y);
+          if (ImageTraversal::calculateDeltaHelper(temp, op) <= tol) {
+              points.insert(points.begin(), point);
+              alreadyVisited[point.x][point.y] = true;
+              currentVisited[point.x][point.y] = true;
+          }
+      }
+  }
 }
 
 /**
@@ -81,6 +103,7 @@ Point BFS::pop() {
   /** @todo [Part 1] */
   if (points.empty()) return Point(-1, -1);
   Point temp = points.back();
+  currentVisited[temp.x][temp.y] = false;
   points.pop_back();
   return temp;
 }

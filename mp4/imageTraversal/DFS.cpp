@@ -31,9 +31,19 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
     startPoint = start;
     tol = tolerance;
 
+    for (int i = 0; i < (int) png.width(); i++) {
+        std::vector<bool> row;
+        for (int j = 0; j < (int) png.height(); j++) {
+            row.push_back(false);
+        }
+        alreadyVisited.push_back(row);
+        currentVisited.push_back(row);
+    }
+
     if (start.x < png.width() && start.y < png.height()) {
         points.push_back(start);
-        alreadyVisited.push_back(start);
+        alreadyVisited[start.x][start.y] = true;
+        currentVisited[start.x][start.y] = true;
         op = png.getPixel(start.x, start.y);
     }
 }
@@ -59,18 +69,25 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
     /** @todo [Part 1] */
-    if (std::find(alreadyVisited.begin(), alreadyVisited.end(), point) == alreadyVisited.end()) {
-        if (point.x < tImage.width() && point.y < tImage.height()) {
+    if (point.x < tImage.width() && point.y < tImage.height()) {
+        if (!alreadyVisited[point.x][point.y]) {
+
             HSLAPixel & temp = tImage.getPixel(point.x, point.y);
             if (ImageTraversal::calculateDeltaHelper(temp, op) <= tol) {
                 points.push_back(point);
-                alreadyVisited.push_back(point);
+                alreadyVisited[point.x][point.y] = true;
+                currentVisited[point.x][point.y] = true;
             }
-        }
-    } else {
-        if (std::find(points.begin(), points.end(), point) != points.end()) {
+        } else {
+            if (currentVisited[point.x][point.y]) {
+                points.erase(std::find(points.begin(), points.end(), point));
+                points.push_back(point);
+            }
+            /*
+            if (std::find(points.begin(), points.end(), point) != points.end()) {
             points.erase(std::find(points.begin(), points.end(), point));
             points.push_back(point);
+            }*/
         }
     }
 }
@@ -82,6 +99,7 @@ Point DFS::pop() {
   /** @todo [Part 1] */
   if (points.empty()) return Point(-1, -1);
   Point temp = points.back();
+  currentVisited[temp.x][temp.y] = false;
   points.pop_back();
   return temp;
 }

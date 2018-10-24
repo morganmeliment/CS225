@@ -58,16 +58,16 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
     Animation animation;
     /** @todo [Part 2] */
     if (!hasBeenInitialized) return animation;
-    PNG tempFrame = fillImage;
+    //PNG tempFrame = fillImage;
 
     int frameIndex = 0;
-    for (Point p : (*fillTraversal)) {
-        if (frameIndex % frameInterval == 0) animation.addFrame(tempFrame);
-        tempFrame.getPixel(p.x, p.y) = picker->getColor(p.x, p.y);
-        fillImage.getPixel(p.x, p.y) = tempFrame.getPixel(p.x, p.y);
+    for (const Point & p : (*fillTraversal)) {
+        if (frameIndex % frameInterval == 0) animation.addFrame(fillImage);
+        //tempFrame.getPixel(p.x, p.y) = picker->getColor(p.x, p.y);
+        fillImage.getPixel(p.x, p.y) = picker->getColor(p.x, p.y);//tempFrame.getPixel(p.x, p.y);
         frameIndex++;
     }
-    animation.addFrame(tempFrame);
+    animation.addFrame(fillImage);
 
     //fillImage = tempFrame;
 

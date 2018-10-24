@@ -36,7 +36,8 @@ private:
   /** @todo [Part 1] */
   /** add private members here*/
   std::vector<Point> points;
-  std::vector<Point> alreadyVisited;
+  std::vector<std::vector<bool>> alreadyVisited;
+  std::vector<std::vector<bool>> currentVisited;
   PNG tImage;
   Point startPoint;
   HSLAPixel op;
