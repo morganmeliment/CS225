@@ -155,11 +155,11 @@ void BTree<K, V>::split_child(BTreeNode* parent, size_t child_idx)
 
 
     /* TODO Your code goes here! */
-	parent->elements.insert(elem_itr, *mid_elem_itr);
+	parent->elements.insert(elem_itr, child->elements[mid_elem_idx]);
 	parent->children.insert(child_itr, new_right);
 
     new_right->elements.clear();
-    for (int i = (int) mid_elem_idx; i < (int) new_left->elements.size(); i++) {
+    for (int i = (int) mid_elem_idx + 1; i < (int) new_left->elements.size(); i++) {
         new_right->elements.push_back(new_left->elements[i]);
     }
     if (!new_left->is_leaf) {
@@ -169,11 +169,13 @@ void BTree<K, V>::split_child(BTreeNode* parent, size_t child_idx)
         }
     }
 
-	//new_right->elements.assign(mid_elem_itr+1,new_left->elements.end());
-	//if (!new_left->is_leaf) new_right->children.assign(mid_child_itr,new_left->children.end());
-
-    new_left->elements.assign(new_left->elements.begin(),mid_elem_itr);
-	if (!new_left->is_leaf) new_left->children.assign(new_left->children.begin(),mid_child_itr);
+    while (new_left->elements.size() > mid_elem_idx) {
+        new_left->elements.pop_back();
+    }
+    if (!new_left->is_leaf) {
+        while (new_left->children.size() > mid_child_idx)
+            new_left->children.pop_back();
+    }
 }
 
 /**
