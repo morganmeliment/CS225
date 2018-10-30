@@ -259,6 +259,18 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+
+    int partitionQS(vector<Point<Dim>>& points, int leftInd, int rightInd,
+                    int pivotIndex, int d);
+
+    KDTreeNode * quickSelectBuildTree(vector<Point<Dim>>& points, int leftInd, int rightInd,
+                    int k, int d);
+
+    KDTreeNode * buildTree(vector<Point<Dim>>& points, int leftInd, int rightInd, int d);
+
+    void swapPoints(vector<Point<Dim>>& points, int ind1, int ind2);
+
+    Point<Dim> nearestNeighborHelper(const Point<Dim>& query, KDTreeNode * curr, int dimension) const;
 };
 
 #include "kdtree.hpp"
