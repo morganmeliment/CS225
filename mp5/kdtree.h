@@ -271,6 +271,12 @@ class KDTree
     void swapPoints(vector<Point<Dim>>& points, int ind1, int ind2);
 
     Point<Dim> nearestNeighborHelper(const Point<Dim>& query, KDTreeNode * curr, int dimension) const;
+
+    void deleteNodes(KDTreeNode *& original);
+
+    KDTreeNode * copyNodes(const KDTreeNode * original);
+
+
 };
 
 #include "kdtree.hpp"

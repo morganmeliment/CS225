@@ -125,11 +125,30 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 }
 
 template <int Dim>
+typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::copyNodes(const KDTreeNode * original) {
+    if (!original) return NULL;
+    KDTreeNode * temp = new KDTreeNode(*original);
+    temp->left = copyNodes(original->left);
+    temp->left = copyNodes(original->right);
+
+    return temp;
+}
+
+template <int Dim>
+void KDTree<Dim>::deleteNodes(KDTreeNode *& original) {
+    if (!original) return;
+    deleteNodes(original->left);
+    deleteNodes(original->right);
+    delete original;
+    original = NULL;
+}
+
+template <int Dim>
 KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   /**
    * @todo Implement this function!
    */
-  root = other->root;
+  root = copyNodes(other->root);
   size = other->size;
 }
 
@@ -138,13 +157,15 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
+  root = copyNodes(rhs->root);
+  size = rhs->size;
 
-  return KDTree<Dim>(rhs);
+  return *this;
 }
 
 template <int Dim>
 KDTree<Dim>::~KDTree() {
-    delete root;
+    deleteNodes(root);
 }
 
 template <int Dim>
