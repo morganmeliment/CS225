@@ -88,9 +88,18 @@ void DHHashTable<K, V>::insert(K const& key, V const& value)
      *  0.7). **Do this check *after* increasing elems!!** Also, don't
      *  forget to mark the cell for probing with should_probe!
      */
+    elems += 1;
+    if (shouldResize()) resizeTable();
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    size_t tempIndex = hash(key, size);
+    size_t jump = secondary_hash(key, size);
+
+    while (table[tempIndex]) tempIndex = ( tempIndex + jump ) % size;
+    table[tempIndex] = new pair <K, V>(key, value);
+    should_probe[tempIndex] = true;
+
+    //(void) key;   // prevent warnings... When you implement this function, remove this line.
+    //(void) value; // prevent warnings... When you implement this function, remove this line.
 }
 
 template <class K, class V>
@@ -99,6 +108,14 @@ void DHHashTable<K, V>::remove(K const& key)
     /**
      * @todo Implement this function
      */
+
+    int rmIndex = findIndex(key);
+    
+    if (rmIndex != -1) {
+        delete table[rmIndex];
+        table[rmIndex] = NULL;
+        elems -= 1;
+    }
 }
 
 template <class K, class V>
@@ -107,7 +124,19 @@ int DHHashTable<K, V>::findIndex(const K& key) const
     /**
      * @todo Implement this function
      */
-    return -1;
+    size_t tempIndex = hash(key, size);
+    size_t jump = secondary_hash(key, size);
+    size_t loopIndex = tempIndex;
+
+    while (should_probe[tempIndex]) {
+         if (table[tempIndex] && table[tempIndex]->first == key)
+             return tempIndex;
+
+         tempIndex = (tempIndex + jump) % size;
+         if (tempIndex == loopIndex) break;
+     }
+
+     return -1;
 }
 
 template <class K, class V>
@@ -168,7 +197,7 @@ void DHHashTable<K, V>::resizeTable()
             size_t h = hash(table[slot]->first, newSize);
             size_t jump = secondary_hash(table[slot]->first, newSize);
             size_t i = 0;
-            size_t idx = h; 
+            size_t idx = h;
             while (temp[idx] != NULL)
             {
                 ++i;
