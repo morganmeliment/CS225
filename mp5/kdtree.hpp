@@ -148,8 +148,8 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   /**
    * @todo Implement this function!
    */
-  root = copyNodes(other->root);
-  size = other->size;
+  root = copyNodes(other.root);
+  size = other.size;
 }
 
 template <int Dim>
@@ -157,8 +157,8 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
-  root = copyNodes(rhs->root);
-  size = rhs->size;
+  root = copyNodes(rhs.root);
+  size = rhs.size;
 
   return *this;
 }

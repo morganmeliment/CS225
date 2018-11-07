@@ -172,7 +172,7 @@ class KDTree
      * Destructor for KDTree.
      */
     ~KDTree();
-
+    
     /**
      * Finds the closest point to the parameter point in the KDTree.
      *
