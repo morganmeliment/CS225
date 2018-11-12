@@ -6,7 +6,7 @@
 #pragma once
 
 #include <vector>
-
+#include <iostream>
 // forward declare descriptor (used for printing, ignore)
 template <class Type, class Comp>
 class HeapNodeDescriptor;
@@ -60,10 +60,10 @@ class heap
 
     /**
      * Updates the element at the provided index of the heap array.
-     * The update is done in such a way that the array will be 
+     * The update is done in such a way that the array will be
      * corrected, so it will remain as a valid heap.
      *
-     * @param idx The index at which to be inserted. 
+     * @param idx The index at which to be inserted.
      * (Remember this is zero-indexed by default)
      * @param elem The element to be updated with.
      */
