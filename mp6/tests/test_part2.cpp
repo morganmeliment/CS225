@@ -350,4 +350,3 @@ TEST_CASE("testDrawSolutionLarge", "[weight=10][part2]")
 	REQUIRE(*actualOutput == solnImage);
 }
  */
-
