@@ -352,13 +352,15 @@ PNG * SquareMaze::drawCreativeMaze() {
 				mazeImage->getPixel(x, y) = black;
 				mazeImageFinal->getPixel(x, y) = black;
 			} else {
-				mazeImageFinal->getPixel(x, y) = mazeImage->getPixel(m * (x - centerX) + centerX, m * (y - centerY) + centerY);
+				//mazeImageFinal->getPixel(x, y) = mazeImage->getPixel(m * (x - centerX) + centerX, m * (y - centerY) + centerY);
+				mazeImageFinal->getPixel(x, y) = mazeImage->getPixel((x - centerX) * abs(cos(1.59 * abs(x - centerX) / radius)) + centerX, (y - centerY) * abs(cos(1.59 * abs(y - centerY) / radius)) + centerY);
 			}
 
 		}
 	}
-
+	mazeImage->writeToFile("ctemp.png");
 	delete mazeImage;
+
 
 	return mazeImageFinal;
 }
