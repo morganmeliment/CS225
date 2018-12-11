@@ -1,7 +1,7 @@
-.objs/tests/GraphTests.o: tests/GraphTests.cpp \
+.objs/tests/ShortestPath.o: tests/ShortestPath.cpp \
   tests/../cs225/catch/catch.hpp tests/../Graph.h tests/../Edge.h \
   tests/../Vertex.h tests/../Graph-given.hpp tests/../Graph.hpp \
-  tests/../Graph2.hpp
+  tests/../Graph2.hpp tests/../DirectedEdge.h
 
 tests/../cs225/catch/catch.hpp:
 
@@ -16,3 +16,5 @@ tests/../Graph-given.hpp:
 tests/../Graph.hpp:
 
 tests/../Graph2.hpp:
+
+tests/../DirectedEdge.h:
