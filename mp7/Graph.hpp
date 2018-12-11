@@ -89,7 +89,7 @@ void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {
     edgeListIter toRemove = edgeList.end();
     for (typename std::list<edgeListIter>::iterator it = adjList[key1].begin();
             it != adjList[key1].end(); it++) {
-        if ((*(*it)).source().key() == key2 || (*(*it)).dest().key() == key2) {
+        if ((*(*it)).get().source().key() == key2 || (*(*it)).get().dest().key() == key2) {
             toRemove = *it;
             adjList[key1].erase(it);
             break;
@@ -97,7 +97,7 @@ void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {
     }
     for (typename std::list<edgeListIter>::iterator it = adjList[key2].begin();
             it != adjList[key2].end(); it++) {
-        if ((*(*it)).source().key() == key1 || (*(*it)).dest().key() == key1) {
+        if ((*(*it)).get().source().key() == key1 || (*(*it)).get().dest().key() == key1) {
             toRemove = *it;
             adjList[key2].erase(it);
             break;
@@ -115,7 +115,7 @@ void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {
 template <class V, class E>
 void Graph<V,E>::removeEdge(const edgeListIter & it) {
     // TODO: Part 2
-    removeEdge((*it).source().key(), (*it).dest().key());
+    removeEdge((*it).get().source().key(), (*it).get().dest().key());
 }
 
 
